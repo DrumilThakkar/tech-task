@@ -1,0 +1,6 @@
+Action,Source,Destination,Volume,Duration,Input,Repetitions
+Pipette,WP1-A10,WP2-B12,10,-,-,-
+-,WP1-B12,WP2-A4,10,-,-,-
+Mix,WP2-D1,-,10,-,-,2
+External,-,-,-,-,Change the reagents,-
+Incubate,-,-,-,10:20:30,-,-
