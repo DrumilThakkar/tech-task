@@ -36,10 +36,14 @@ class FileManager {
             action: rowsData[0],
             source: rowsData[1],
             destination: rowsData[2],
-            volume: rowsData[3] == "-" ? -1 : int.parse(rowsData[3]),
+            volume: (rowsData[3] == "-" || rowsData[3] == "null")
+                ? -1
+                : int.parse(rowsData[3]),
             duration: rowsData[4],
             input: rowsData[5],
-            repetitions: rowsData[6] == "-" ? -1 : int.parse(rowsData[6]),
+            repetitions: (rowsData[6] == "-" || rowsData[6] == "null")
+                ? -1
+                : int.parse(rowsData[6]),
           ),
         );
         rowsData = [];
@@ -68,28 +72,28 @@ class FileManager {
     // Iterate over each row and identify valid and invalid steps
     // First row is header row, so we start from the second row
     for (var test in tests.test) {
-      switch (test.action) {
-        case "Pipette":
-          if ((test.source.isEmpty && test.destination.isEmpty) ||
-              (test.source == "-" && test.destination == "-")) {
+      switch (test.action.toLowerCase()) {
+        case "pipette":
+          if ((test.source.isEmpty || test.source == "-") ||
+              (test.destination.isEmpty || test.destination == "-")) {
             // invalidSteps.add(test.action);
             test.isValidTest = false;
           }
           break;
-        case "Mix":
-          if ((test.source.isEmpty || test.source == "-") &&
+        case "mix":
+          if ((test.source.isEmpty || test.source == "-") ||
               (test.repetitions == -1 && test.volume == -1)) {
             // invalidSteps.add(test.action);
             test.isValidTest = false;
           }
           break;
-        case "External":
+        case "external":
           if ((test.input.isEmpty || test.input == "-")) {
             // invalidSteps.add(test.action);
             test.isValidTest = false;
           }
           break;
-        case "Incubate":
+        case "incubate":
           if ((test.duration.isEmpty || test.duration == "-")) {
             // invalidSteps.add(test.action);
             test.isValidTest = false;
@@ -114,7 +118,7 @@ class FileManager {
     try {
       if (filePath.endsWith('.csv')) {
         String csvContent = await File(filePath).readAsString();
-        // mylog("CSV FILE DATA $csvContent");
+        mylog("CSV FILE DATA $csvContent");
         return const CsvToListConverter()
             .convert(csvContent, convertEmptyTo: '-');
       } else if (filePath.endsWith('.xlsx')) {

@@ -210,9 +210,10 @@ class MyHomePage extends StatelessWidget {
       onPressed: () async {
         //Pick file
         FilePickerResult? csvFile = await FilePicker.platform.pickFiles(
-          allowedExtensions: ['csv'],
-          type: FileType.custom,
+          // allowedExtensions: ['xlsv', 'csv'],
+          type: FileType.any,
           allowMultiple: false,
+          allowCompression: false,
         );
         await context.read<FileManagerCubit>().processFile(csvFile!.paths[0]!);
       },
